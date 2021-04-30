@@ -8,6 +8,7 @@ import 'package:skype_app/resources/firebase_repository.dart';
 import 'package:skype_app/screens/home_screen.dart';
 import 'package:skype_app/screens/login_screen.dart';
 import 'package:skype_app/screens/search_screen.dart';
+import 'package:skype_app/screens/welcome.dart';
 
 void main() => runApp(MyApp());
 
@@ -37,7 +38,7 @@ class _MyAppState extends State<MyApp> {
                 if (snapshot.hasData) {
                   return HomeScreen();
                 } else {
-                  return LoginScreen();
+                  return WelcomeScreen();
                 }
               })),
     );
