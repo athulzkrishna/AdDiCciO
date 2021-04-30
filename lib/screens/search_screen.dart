@@ -9,6 +9,9 @@ import 'package:skype_app/utils/universal_variables.dart';
 import 'package:skype_app/widgets/custom_tile.dart';
 
 class SearchScreen extends StatefulWidget {
+  final String text;
+  SearchScreen(this.text);
+
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
@@ -133,7 +136,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           },
                         ),
                         border: InputBorder.none,
-                        hintText: "Search",
+                        hintText: "Search among ${widget.text} users....",
                         hintStyle: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15,

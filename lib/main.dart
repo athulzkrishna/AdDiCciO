@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
           title: "Skype Clone",
           debugShowCheckedModeBanner: false,
           initialRoute: '/',
-          routes: {'/search_screen': (context) => SearchScreen()},
+          routes: {'/search_screen': (context) => SearchScreen("Many")},
           theme: ThemeData(brightness: Brightness.dark),
           home: FutureBuilder(
               future: _repository.getCurrentUser(),

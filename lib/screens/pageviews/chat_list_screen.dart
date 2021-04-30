@@ -10,6 +10,7 @@ import 'package:skype_app/screens/pageviews/widgets/contact_view.dart';
 import 'package:skype_app/screens/pageviews/widgets/new_chat_button.dart';
 import 'package:skype_app/screens/pageviews/widgets/quiet_box.dart';
 import 'package:skype_app/screens/pageviews/widgets/user_circle.dart';
+import 'package:skype_app/screens/search_screen.dart';
 import 'package:skype_app/utils/universal_variables.dart';
 import 'package:skype_app/utils/utilities.dart';
 import 'package:skype_app/widgets/appbar.dart';
@@ -26,6 +27,8 @@ final FirebaseRepository _repository = FirebaseRepository();
 class _ChatListScreenState extends State<ChatListScreen> {
   String currentUserId;
   String initials;
+  String kl;
+  int k = 15;
 
   @override
   void initState() {
@@ -39,6 +42,13 @@ class _ChatListScreenState extends State<ChatListScreen> {
     });
   }
 
+  int count() {
+    setState(() async {
+      k = await _repository.getCount();
+    });
+    return k;
+  }
+
   CustomAppBar customAppBar(BuildContext context) {
     return CustomAppBar(
       leading: IconButton(
@@ -46,7 +56,9 @@ class _ChatListScreenState extends State<ChatListScreen> {
           Icons.notifications,
           color: Colors.white,
         ),
-        onPressed: () {},
+        onPressed: () {
+          k = count();
+        },
       ),
       title: UserCircle(),
       centerTitle: true,
@@ -56,8 +68,19 @@ class _ChatListScreenState extends State<ChatListScreen> {
             Icons.search,
             color: Colors.white,
           ),
-          onPressed: () {
-            Navigator.pushNamed(context, '/search_screen');
+          onPressed: () async {
+            if (k == 15) {
+              kl = "many";
+            } else {
+              kl = k.toString();
+            }
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SearchScreen(kl),
+              ),
+            );
+            k = count();
           },
         ),
         IconButton(
