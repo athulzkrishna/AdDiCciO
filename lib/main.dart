@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:skype_app/animation/pathway.dart';
 import 'package:skype_app/provider/user_provider.dart';
 
 import 'package:skype_app/resources/firebase_repository.dart';
@@ -36,7 +37,7 @@ class _MyAppState extends State<MyApp> {
               future: _repository.getCurrentUser(),
               builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
                 if (snapshot.hasData) {
-                  return HomeScreen();
+                  return MyHomePage();
                 } else {
                   return WelcomeScreen();
                 }

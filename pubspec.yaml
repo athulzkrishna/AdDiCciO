@@ -57,6 +57,7 @@ dependencies:
   # cached network image
   cached_network_image: ^2.0.0
   agora_rtc_engine: ^1.0.8
+  google_fonts: ^1.1.1
 
   
 dev_dependencies:
@@ -78,6 +79,8 @@ flutter:
   assets:
    - assets/app_logo.png
    - assets/welcome_image.png
+   - assets/good.jpg
+   - assets/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

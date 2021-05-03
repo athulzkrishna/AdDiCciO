@@ -11,6 +11,7 @@ import 'package:skype_app/utils/universal_variables.dart';
 import 'package:skype_app/widgets/appbar.dart';
 import 'package:skype_app/widgets/custom_tile.dart';
 import 'package:emoji_picker/emoji_picker.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ChatScreen extends StatefulWidget {
   final User receiver;
@@ -74,17 +75,79 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return PickupLayout(
       scaffold: Scaffold(
-        backgroundColor: UniversalVariables.blackColor,
-        appBar: customAppBar(context),
-        body: Column(
-          children: <Widget>[
-            Flexible(
-              child: messageList(),
-            ),
-            chatControls(),
-            showEmojiPicker ? Container(child: emojiContainer()) : Container(),
-          ],
+        extendBodyBehindAppBar: true,
+
+        backgroundColor: Colors.transparent,
+        appBar: _buildAppBar(context), //customAppBar(context),
+        body: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/bggm.jpg"), fit: BoxFit.cover)),
+          child: Column(
+            children: <Widget>[
+              Flexible(
+                child: messageList(),
+              ),
+              chatControls(),
+              showEmojiPicker
+                  ? Container(child: emojiContainer())
+                  : Container(),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      leading: IconButton(
+        icon: Icon(
+          Icons.arrow_back,
+          color: Colors.black,
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      elevation: 0,
+      actions: <Widget>[
+        IconButton(
+          padding: const EdgeInsets.all(16),
+          icon: Icon(Icons.video_call, color: Colors.black),
+          onPressed: () async =>
+              await Permissions.cameraAndMicrophonePermissionsGranted()
+                  ? CallUtils.dial(
+                      from: sender, to: widget.receiver, context: context)
+                  : {},
+        )
+      ],
+      title: Row(
+        children: <Widget>[
+          Stack(
+            children: <Widget>[
+              CircleAvatar(
+                backgroundImage: NetworkImage(widget.receiver.profilePhoto),
+                radius: 20,
+              ),
+            ],
+          ),
+          SizedBox(
+            width: 8,
+          ),
+          Expanded(
+            child: Text(widget.receiver.name,
+                maxLines: 1,
+                style: GoogleFonts.pangolin(
+                  textStyle: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
+                )),
+          ),
+        ],
       ),
     );
   }
@@ -129,7 +192,7 @@ class _ChatScreenState extends State<ChatScreen> {
         // });
 
         return ListView.builder(
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.only(top: 10.0),
           itemCount: snapshot.data.documents.length,
           reverse: true,
           controller: _listScrollController,
@@ -162,11 +225,11 @@ class _ChatScreenState extends State<ChatScreen> {
     Radius messageRadius = Radius.circular(10);
 
     return Container(
-      margin: EdgeInsets.only(top: 12),
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       constraints:
           BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.65),
       decoration: BoxDecoration(
-        color: UniversalVariables.senderColor,
+        color: Color(0xff7986cb), //Color(0xff535875),
         borderRadius: BorderRadius.only(
           topLeft: messageRadius,
           topRight: messageRadius,
@@ -181,33 +244,35 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   getMessage(Message message) {
-    return Text(
-      message.message,
-      style: TextStyle(
-        color: Colors.white,
-        fontSize: 16.0,
-      ),
-    );
+    return Text(message.message,
+        style: GoogleFonts.neucha(
+          textStyle: TextStyle(
+              color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.w300),
+        ));
+  }
+
+  gettMessage(Message message) {
+    return Text(message.message,
+        style: GoogleFonts.neucha(
+          textStyle: TextStyle(
+              color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.w300),
+        ));
   }
 
   Widget receiverLayout(Message message) {
-    Radius messageRadius = Radius.circular(10);
+    // Radius messageRadius = Radius.circular(10);
 
     return Container(
-      margin: EdgeInsets.only(top: 12),
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       constraints:
           BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.65),
       decoration: BoxDecoration(
         color: UniversalVariables.receiverColor,
-        borderRadius: BorderRadius.only(
-          bottomRight: messageRadius,
-          topRight: messageRadius,
-          bottomLeft: messageRadius,
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
       child: Padding(
         padding: EdgeInsets.all(10),
-        child: getMessage(message),
+        child: gettMessage(message),
       ),
     );
   }
@@ -274,7 +339,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           icon: Icons.add_location),
                       ModalTile(
                           title: "Schedule Call",
-                          subtitle: "Arrange a skype call and get reminders",
+                          subtitle: "Arrange a skype call",
                           icon: Icons.schedule),
                       ModalTile(
                           title: "Create Poll",
@@ -344,9 +409,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   },
                   decoration: InputDecoration(
                     hintText: "Type a message",
-                    hintStyle: TextStyle(
-                      color: UniversalVariables.greyColor,
-                    ),
+                    hintStyle: TextStyle(color: Colors.white),
                     border: OutlineInputBorder(
                         borderRadius: const BorderRadius.all(
                           const Radius.circular(50.0),
@@ -357,22 +420,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     filled: true,
                     fillColor: UniversalVariables.separatorColor,
                   ),
-                ),
-                IconButton(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onPressed: () {
-                    if (!showEmojiPicker) {
-                      // keyboard is visible
-                      hideKeyboard();
-                      showEmojiContainer();
-                    } else {
-                      //keyboard is hidden
-                      showKeyboard();
-                      hideEmojiContainer();
-                    }
-                  },
-                  icon: Icon(Icons.face),
                 ),
               ],
             ),

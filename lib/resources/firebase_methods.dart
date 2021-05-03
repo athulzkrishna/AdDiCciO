@@ -233,4 +233,18 @@ class FirebaseMethods {
     //print('hello');
     return docs.length;
   }
+
+  Future<QuerySnapshot> fetchusers() => _userCollection.getDocuments();
+  Future<List<User>> fetchuusers(FirebaseUser currentUser) async {
+    List<User> userList = List<User>();
+
+    QuerySnapshot querySnapshot =
+        await firestore.collection("users").getDocuments();
+    for (var i = 0; i < querySnapshot.documents.length; i++) {
+      if (querySnapshot.documents[i].documentID != currentUser.uid) {
+        userList.add(User.fromMap(querySnapshot.documents[i].data));
+      }
+    }
+    return userList;
+  }
 }

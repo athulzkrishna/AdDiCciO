@@ -30,7 +30,7 @@ class QuietBox extends StatelessWidget {
                 style: TextStyle(
                   letterSpacing: 1.2,
                   fontWeight: FontWeight.normal,
-                  fontSize: 18,
+                  fontSize: 15,
                 ),
               ),
               SizedBox(height: 25),

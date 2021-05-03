@@ -6,6 +6,7 @@ import 'package:skype_app/provider/user_provider.dart';
 import 'package:skype_app/resources/firebase_methods.dart';
 import 'package:skype_app/resources/firebase_repository.dart';
 import 'package:skype_app/screens/callscreens/pickup/pickup_layout.dart';
+import 'package:skype_app/screens/pageviews/pplumk.dart';
 import 'package:skype_app/screens/pageviews/widgets/contact_view.dart';
 import 'package:skype_app/screens/pageviews/widgets/new_chat_button.dart';
 import 'package:skype_app/screens/pageviews/widgets/quiet_box.dart';
@@ -100,7 +101,22 @@ class _ChatListScreenState extends State<ChatListScreen> {
       scaffold: Scaffold(
         backgroundColor: UniversalVariables.blackColor,
         appBar: customAppBar(context),
-        floatingActionButton: NewChatButton(),
+        floatingActionButton: FloatingActionButton(
+            child: Container(
+              decoration: BoxDecoration(
+                  gradient: UniversalVariables.fabGradient,
+                  borderRadius: BorderRadius.circular(50)),
+              child: Icon(
+                Icons.edit,
+                color: Colors.white,
+                size: 25,
+              ),
+              padding: EdgeInsets.all(15),
+            ),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => KnownListScreen()));
+            }),
         body: ChatListContainer(),
       ),
     );

@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:skype_app/animation/pathway.dart';
 import 'package:skype_app/resources/firebase_repository.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:skype_app/utils/universal_variables.dart';
@@ -27,6 +29,7 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Widget loginButton() {
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     return Shimmer.fromColors(
       baseColor: Colors.white,
       highlightColor: UniversalVariables.senderColor,
@@ -68,13 +71,13 @@ class LoginScreenState extends State<LoginScreen> {
         _repository.addDataToDb(user).then((value) {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) {
-            return HomeScreen();
+            return MyHomePage();
           }));
         });
       } else {
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) {
-          return HomeScreen();
+          return MyHomePage();
         }));
       }
     });

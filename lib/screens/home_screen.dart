@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   icon: Icon(Icons.chat,
                       color: (_page == 0)
                           ? UniversalVariables.lightBlueColor
-                          : UniversalVariables.greyColor),
+                          : Colors.grey),
                   title: Text(
                     "Chats",
                     style: TextStyle(
@@ -134,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   icon: Icon(Icons.call,
                       color: (_page == 1)
                           ? UniversalVariables.lightBlueColor
-                          : UniversalVariables.greyColor),
+                          : Colors.grey),
                   title: Text(
                     "Calls",
                     style: TextStyle(
@@ -148,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   icon: Icon(Icons.contact_phone,
                       color: (_page == 2)
                           ? UniversalVariables.lightBlueColor
-                          : UniversalVariables.greyColor),
+                          : Colors.grey),
                   title: Text(
                     "Contacts",
                     style: TextStyle(
