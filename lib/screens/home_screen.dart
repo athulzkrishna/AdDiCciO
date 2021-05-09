@@ -98,12 +98,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             Center(
                 child: Text(
               "Call Logs",
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.black),
             )),
             Center(
                 child: Text(
               "Contact Screen",
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.black),
             )),
           ],
           controller: pageController,

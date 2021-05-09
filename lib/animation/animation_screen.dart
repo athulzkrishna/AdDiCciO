@@ -49,7 +49,7 @@ class _AnimationScreenState extends State<AnimationScreen>
           height: double.infinity,
           child: CustomPaint(
               painter: HolePainter(
-                  color: widget.color,
+                  color: Colors.lightBlue,
                   holeSize: _animation.holeSize.value * size.width))),
       Positioned(
           top: _animation.dropPosition.value * size.height,
@@ -67,9 +67,8 @@ class _AnimationScreenState extends State<AnimationScreen>
               child: Opacity(
                   opacity: _animation.textOpacity.value,
                   child: Text(
-                    'Loading >>>',
-                    style: TextStyle(
-                        color: UniversalVariables.greyColor, fontSize: 20),
+                    'Loading ...',
+                    style: TextStyle(color: Colors.white, fontSize: 20),
                   ))))
     ]);
   }

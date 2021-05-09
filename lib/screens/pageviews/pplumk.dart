@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'package:skype_app/models/user.dart';
@@ -102,7 +103,15 @@ class _KnownListScreenState extends State<KnownListScreen> {
       scaffold: Scaffold(
         backgroundColor: UniversalVariables.blackColor,
         appBar: AppBar(
-          title: Text("People you may know", textAlign: TextAlign.center),
+          backgroundColor: Colors.lightBlue,
+          title: Text("People you may know",
+              textAlign: TextAlign.center,
+              style: GoogleFonts.montserrat(
+                textStyle: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w500),
+              )),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () => Navigator.pop(context),

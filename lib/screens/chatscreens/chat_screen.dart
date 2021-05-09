@@ -12,6 +12,7 @@ import 'package:skype_app/widgets/appbar.dart';
 import 'package:skype_app/widgets/custom_tile.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class ChatScreen extends StatefulWidget {
   final User receiver;
@@ -82,7 +83,7 @@ class _ChatScreenState extends State<ChatScreen> {
         body: Container(
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("assets/bggm.jpg"), fit: BoxFit.cover)),
+                  image: AssetImage("assets/bggt.jpg"), fit: BoxFit.cover)),
           child: Column(
             children: <Widget>[
               Flexible(
@@ -139,10 +140,10 @@ class _ChatScreenState extends State<ChatScreen> {
           Expanded(
             child: Text(widget.receiver.name,
                 maxLines: 1,
-                style: GoogleFonts.pangolin(
+                style: GoogleFonts.lato(
                   textStyle: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w500,
                     color: Colors.black,
                   ),
                 )),
@@ -192,7 +193,7 @@ class _ChatScreenState extends State<ChatScreen> {
         // });
 
         return ListView.builder(
-          padding: EdgeInsets.only(top: 10.0),
+          padding: EdgeInsets.all(15.0),
           itemCount: snapshot.data.documents.length,
           reverse: true,
           controller: _listScrollController,
@@ -222,57 +223,109 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget senderLayout(Message message) {
-    Radius messageRadius = Radius.circular(10);
+    //  Radius messageRadius = Radius.circular(10);
 
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      constraints:
-          BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.65),
-      decoration: BoxDecoration(
-        color: Color(0xff7986cb), //Color(0xff535875),
-        borderRadius: BorderRadius.only(
-          topLeft: messageRadius,
-          topRight: messageRadius,
-          bottomLeft: messageRadius,
-        ),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: getMessage(message),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 7.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Text(readTimestamp(message.timestamp),
+              style: GoogleFonts.montserrat(
+                textStyle: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 10.0,
+                    fontWeight: FontWeight.w300),
+              )),
+          SizedBox(width: 15),
+          Container(
+              constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * .6),
+              padding: const EdgeInsets.all(15.0),
+              decoration: BoxDecoration(
+                color: Colors.lightBlue,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  topRight: Radius.circular(25),
+                  bottomLeft: Radius.circular(25),
+                ),
+              ),
+              child: getMessage(message)),
+        ],
       ),
     );
   }
 
   getMessage(Message message) {
     return Text(message.message,
-        style: GoogleFonts.neucha(
+        style: GoogleFonts.montserrat(
           textStyle: TextStyle(
-              color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.w300),
+              color: Colors.white, fontSize: 15.0, fontWeight: FontWeight.w300),
         ));
   }
 
   gettMessage(Message message) {
     return Text(message.message,
-        style: GoogleFonts.neucha(
+        style: GoogleFonts.montserrat(
           textStyle: TextStyle(
-              color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.w300),
+              color: Colors.black, fontSize: 15.0, fontWeight: FontWeight.w300),
         ));
+  }
+
+  String readTimestamp(Timestamp time) {
+    DateTime s =
+        DateTime.fromMicrosecondsSinceEpoch(time.microsecondsSinceEpoch);
+    String formattedTime = DateFormat.jm().format(s);
+    String k = "${s.hour}:${s.minute}";
+    return formattedTime;
   }
 
   Widget receiverLayout(Message message) {
     // Radius messageRadius = Radius.circular(10);
 
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      constraints:
-          BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.65),
-      decoration: BoxDecoration(
-        color: UniversalVariables.receiverColor,
-        borderRadius: BorderRadius.all(Radius.circular(20)),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: gettMessage(message),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 7.0),
+      child: Row(
+        children: <Widget>[
+          CircleAvatar(
+            backgroundImage: NetworkImage(widget.receiver.profilePhoto),
+            radius: 20,
+          ),
+          SizedBox(width: 15),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(widget.receiver.name,
+                  style: GoogleFonts.montserrat(
+                    textStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 10.0,
+                        fontWeight: FontWeight.w100),
+                  )),
+              Container(
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * .6),
+                  padding: const EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                    color: Color(0xfff9f9f9),
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(25),
+                      bottomLeft: Radius.circular(25),
+                      bottomRight: Radius.circular(25),
+                    ),
+                  ),
+                  child: gettMessage(message)),
+            ],
+          ),
+          SizedBox(width: 10),
+          Text(readTimestamp(message.timestamp),
+              style: GoogleFonts.montserrat(
+                textStyle: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 10.0,
+                    fontWeight: FontWeight.w300),
+              ))
+        ],
       ),
     );
   }
@@ -418,7 +471,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                     filled: true,
-                    fillColor: UniversalVariables.separatorColor,
+                    fillColor: Colors.lightBlue,
                   ),
                 ),
               ],

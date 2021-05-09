@@ -82,7 +82,7 @@ class _SearchScreenState extends State<SearchScreen> {
           title: Text(
             searchedUser.username,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black87,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -149,8 +149,8 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ),
             decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [Colors.blue.shade900, Colors.black])),
+                gradient:
+                    LinearGradient(colors: [Colors.lightBlue, Colors.white])),
           ),
         ),
       ),

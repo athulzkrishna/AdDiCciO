@@ -55,7 +55,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
       leading: IconButton(
         icon: Icon(
           Icons.notifications,
-          color: Colors.white,
+          color: Colors.black87,
         ),
         onPressed: () {
           k = count();
@@ -67,7 +67,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
         IconButton(
           icon: Icon(
             Icons.search,
-            color: Colors.white,
+            color: Colors.black87,
           ),
           onPressed: () async {
             if (k == 15) {
@@ -83,13 +83,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
             );
             k = count();
           },
-        ),
-        IconButton(
-          icon: Icon(
-            Icons.more_vert,
-            color: Colors.white,
-          ),
-          onPressed: () {},
         ),
       ],
     );

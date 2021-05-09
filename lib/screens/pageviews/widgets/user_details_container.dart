@@ -42,10 +42,7 @@ class UserDetailsContainer extends StatelessWidget {
         children: <Widget>[
           CustomAppBar(
             leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
+              icon: Icon(Icons.arrow_back, color: Colors.black87),
               onPressed: () => Navigator.maybePop(context),
             ),
             centerTitle: true,
@@ -55,7 +52,7 @@ class UserDetailsContainer extends StatelessWidget {
                 onPressed: () => signOut(),
                 child: Text(
                   "Sign Out",
-                  style: TextStyle(color: Colors.white, fontSize: 12),
+                  style: TextStyle(color: Colors.black87, fontSize: 12),
                 ),
               )
             ],
@@ -91,13 +88,13 @@ class UserDetailsBody extends StatelessWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
-                  color: Colors.white,
+                  color: Colors.black87,
                 ),
               ),
               SizedBox(height: 10),
               Text(
                 user.email,
-                style: TextStyle(fontSize: 14, color: Colors.white),
+                style: TextStyle(fontSize: 14, color: Colors.black87),
               ),
             ],
           ),

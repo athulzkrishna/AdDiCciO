@@ -20,7 +20,7 @@ class WelcomeScreen extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.w900,
-                    color: UniversalVariables.greyColor,
+                    color: Colors.lightBlue,
                     letterSpacing: 1.2)),
             Spacer(),
             Text(
@@ -28,7 +28,7 @@ class WelcomeScreen extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 18,
-                color: UniversalVariables.greyColor,
+                color: Colors.lightBlue,
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -46,9 +46,9 @@ class WelcomeScreen extends StatelessWidget {
                       Text(
                         "Next",
                         style: TextStyle(
-                          color: UniversalVariables.greyColor,
+                          color: Colors.lightBlue,
                           fontSize: 18,
-                          fontWeight: FontWeight.w200,
+                          fontWeight: FontWeight.w300,
                         ),
                       ),
                       SizedBox(width: kDefaultPadding / 4),

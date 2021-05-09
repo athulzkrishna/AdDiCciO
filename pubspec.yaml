@@ -58,6 +58,7 @@ dependencies:
   cached_network_image: ^2.0.0
   agora_rtc_engine: ^1.0.8
   google_fonts: ^1.1.1
+  intl: ^0.17.0
 
   
 dev_dependencies:
