@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:skype_app/enum/user_state.dart';
+import 'package:skype_app/local_db/repository/log_repository.dart';
 import 'package:skype_app/models/user.dart';
 import 'package:skype_app/provider/user_provider.dart';
 import 'package:skype_app/resources/firebase_methods.dart';
+import 'package:skype_app/screens/logs/log_screen.dart';
 import 'package:skype_app/screens/pageviews/chat_list_screen.dart';
 import 'package:skype_app/utils/universal_variables.dart';
 
@@ -31,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       userProvider = Provider.of<UserProvider>(context, listen: false);
       await userProvider.refreshUser();
+      LogRepository.init(isHive: true, dbName: userProvider.getUser.uid);
       _authMethods.setUserState(
           userId: userProvider.getUser.uid, userState: UserState.Online);
     });
@@ -95,20 +98,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         body: PageView(
           children: <Widget>[
             Center(child: ChatListScreen()),
-            Center(
-                child: Text(
-              "Call Logs",
-              style: TextStyle(color: Colors.black),
-            )),
-            Center(
-                child: Text(
-              "Contact Screen",
-              style: TextStyle(color: Colors.black),
-            )),
+            Center(child: LogScreen()),
           ],
           controller: pageController,
           onPageChanged: onPageChanged,
-          physics: NeverScrollableScrollPhysics(),
+          // physics: NeverScrollableScrollPhysics(),
         ),
         bottomNavigationBar: Container(
           child: Padding(
@@ -140,20 +134,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     style: TextStyle(
                         fontSize: _labelFontSize,
                         color: (_page == 1)
-                            ? UniversalVariables.lightBlueColor
-                            : Colors.grey),
-                  ),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.contact_phone,
-                      color: (_page == 2)
-                          ? UniversalVariables.lightBlueColor
-                          : Colors.grey),
-                  title: Text(
-                    "Contacts",
-                    style: TextStyle(
-                        fontSize: _labelFontSize,
-                        color: (_page == 2)
                             ? UniversalVariables.lightBlueColor
                             : Colors.grey),
                   ),

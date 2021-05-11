@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,8 +5,7 @@ import 'package:skype_app/animation/pathway.dart';
 import 'package:skype_app/provider/user_provider.dart';
 
 import 'package:skype_app/resources/firebase_repository.dart';
-import 'package:skype_app/screens/home_screen.dart';
-import 'package:skype_app/screens/login_screen.dart';
+
 import 'package:skype_app/screens/search_screen.dart';
 import 'package:skype_app/screens/welcome.dart';
 
