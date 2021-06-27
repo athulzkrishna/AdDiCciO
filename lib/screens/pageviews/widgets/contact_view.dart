@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:skype_app/models/contact.dart';
@@ -8,7 +9,9 @@ import 'package:skype_app/screens/chatscreens/chat_screen.dart';
 import 'package:skype_app/screens/chatscreens/widgets/cached_image.dart';
 import 'package:skype_app/utils/universal_variables.dart';
 import 'package:skype_app/widgets/custom_tile.dart';
-
+import 'package:skype_app/widgets/profile_helper.dart';
+import 'package:skype_app/widgets/tile.dart';
+import 'package:recase/recase.dart';
 import 'last_message_container.dart';
 import 'online_dot_indicator.dart';
 
@@ -50,7 +53,7 @@ class ViewLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
 
-    return CustomTile(
+    return Tile(
       mini: false,
       onTap: () => Navigator.push(
           context,
@@ -59,8 +62,11 @@ class ViewLayout extends StatelessWidget {
               receiver: contact,
             ),
           )),
+      onLongPress: () => onTapProfileChatItem(context, contact),
       title: Text(
-        (contact != null ? contact.name : null) != null ? contact.name : "..",
+        (contact != null ? contact.name.camelCase : null) != null
+            ? contact.name.titleCase
+            : "..",
         style:
             TextStyle(color: Colors.black87, fontFamily: "Arial", fontSize: 19),
       ),
@@ -74,11 +80,27 @@ class ViewLayout extends StatelessWidget {
         constraints: BoxConstraints(maxHeight: 60, maxWidth: 60),
         child: Stack(
           children: <Widget>[
-            CachedImage(
-              contact.profilePhoto,
-              radius: 80,
-              isRound: true,
+            CachedNetworkImage(
+              imageUrl: contact
+                  .profilePhoto, //'https://homepages.cae.wisc.edu/~ece533/images/airplane.png',
+              imageBuilder: (context, imageProvider) => Container(
+                // width: 50.0,
+                // height: 50.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image:
+                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                ),
+              ),
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => Icon(Icons.call),
             ),
+
+            //  CachedImage(
+            //  contact.profilePhoto,
+            //   radius: 80,
+            //   isRound: true,
+            // ),
             OnlineDotIndicator(
               uid: contact.uid,
             ),
@@ -87,4 +109,15 @@ class ViewLayout extends StatelessWidget {
       ),
     );
   }
+}
+
+void onTapProfileChatItem(BuildContext context, User chat) {
+  Dialog profileDialog = DialogHelpers.getProfileDialog(
+    context: context,
+    id: chat.uid,
+    imageUrl: chat.profilePhoto,
+    name: chat.name,
+  );
+  showDialog(
+      context: context, builder: (BuildContext context) => profileDialog);
 }

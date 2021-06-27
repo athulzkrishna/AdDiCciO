@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:skype_app/constants/strings.dart';
@@ -21,7 +24,7 @@ class FirebaseMethods {
 
   //user class
   User user = User();
-
+  StorageReference _storageReference;
   Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser currentUser;
     currentUser = await _auth.currentUser();
@@ -246,5 +249,40 @@ class FirebaseMethods {
       }
     }
     return userList;
+  }
+
+  void setUserphoto({@required String userId, @required String l}) {
+    _userCollection.document(userId).updateData({
+      "profile_photo": l,
+    });
+  }
+  // void uploadImage(File image, String receiverId, String senderId,
+  // ImageUploadProvider imageUploadProvider) async {
+  // Set some loading value to db and show it to user
+  // imageUploadProvider.setToLoading();
+
+  // Get url from the image bucket
+  // String url = await uploadImageToStorage(image);
+
+  // Hide loading
+  //  imageUploadProvider.setToIdle();
+
+  //setImageMsg(url, receiverId, senderId);
+  //}
+  Future<String> uploadImageToStorage(File imageFile) async {
+    // mention try catch later on
+
+    try {
+      _storageReference = FirebaseStorage.instance
+          .ref()
+          .child('${DateTime.now().millisecondsSinceEpoch}');
+      StorageUploadTask storageUploadTask =
+          _storageReference.putFile(imageFile);
+      var url = await (await storageUploadTask.onComplete).ref.getDownloadURL();
+      // print(url);
+      return url;
+    } catch (e) {
+      return null;
+    }
   }
 }

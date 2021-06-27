@@ -5,15 +5,23 @@ import 'package:skype_app/screens/pageviews/widgets/user_details_container.dart'
 import 'package:skype_app/utils/universal_variables.dart';
 import 'package:skype_app/utils/utilities.dart';
 
-class UserCircle extends StatelessWidget {
+class UserCircle extends StatefulWidget {
+  @override
+  _UserCircleState createState() => _UserCircleState();
+}
+
+class _UserCircleState extends State<UserCircle> {
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
+
     return GestureDetector(
       onTap: () => showModalBottomSheet(
         isScrollControlled: true,
         context: context,
-        backgroundColor: UniversalVariables.blackColor,
+        barrierColor: Colors.blue[50].withOpacity(0.9),
+        backgroundColor: Colors.transparent,
+        //backgroundColor: UniversalVariables.blackColor,
         builder: (context) => UserDetailsContainer(),
       ),
       child: Container(

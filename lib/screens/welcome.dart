@@ -15,7 +15,7 @@ class WelcomeScreen extends StatelessWidget {
             Spacer(flex: 2),
             Image.asset("assets/welcome_image.png"),
             Spacer(flex: 3),
-            Text("Welcome to OpenUp \nMessaging app",
+            Text("Welcome to Addició \nMessaging app",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 25,

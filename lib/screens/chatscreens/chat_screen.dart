@@ -13,6 +13,7 @@ import 'package:skype_app/widgets/custom_tile.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:recase/recase.dart';
 
 class ChatScreen extends StatefulWidget {
   final User receiver;
@@ -138,7 +139,7 @@ class _ChatScreenState extends State<ChatScreen> {
             width: 8,
           ),
           Expanded(
-            child: Text(widget.receiver.name,
+            child: Text(widget.receiver.name.titleCase,
                 maxLines: 1,
                 style: GoogleFonts.lato(
                   textStyle: TextStyle(
@@ -295,7 +296,7 @@ class _ChatScreenState extends State<ChatScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(widget.receiver.name,
+              Text(widget.receiver.name.titleCase,
                   style: GoogleFonts.montserrat(
                     textStyle: TextStyle(
                         color: Colors.black,

@@ -8,7 +8,7 @@ import 'package:skype_app/screens/chatscreens/chat_screen.dart';
 import 'package:skype_app/screens/chatscreens/widgets/cached_image.dart';
 import 'package:skype_app/utils/universal_variables.dart';
 import 'package:skype_app/widgets/custom_tile.dart';
-
+import 'package:recase/recase.dart';
 import 'last_message_container.dart';
 import 'online_dot_indicator.dart';
 
@@ -60,7 +60,9 @@ class ViewLayout extends StatelessWidget {
             ),
           )),
       title: Text(
-        (contact != null ? contact.name : null) != null ? contact.name : "..",
+        (contact != null ? contact.name : null) != null
+            ? contact.name.titleCase
+            : "..",
         style:
             TextStyle(color: Colors.black87, fontFamily: "Arial", fontSize: 19),
       ),

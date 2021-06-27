@@ -38,4 +38,7 @@ class User {
     this.state = mapData['state'];
     this.profilePhoto = mapData['profile_photo'];
   }
+  void change(String l) {
+    this.profilePhoto = l;
+  }
 }

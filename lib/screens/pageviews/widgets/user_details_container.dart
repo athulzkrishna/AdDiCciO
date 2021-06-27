@@ -1,17 +1,27 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:skype_app/enum/user_state.dart';
 import 'package:skype_app/models/user.dart';
 import 'package:skype_app/provider/user_provider.dart';
 import 'package:skype_app/resources/firebase_methods.dart';
-
+import 'package:flutter/scheduler.dart';
 import 'package:skype_app/screens/chatscreens/widgets/cached_image.dart';
 import 'package:skype_app/screens/login_screen.dart';
+import 'package:skype_app/utils/utilities.dart';
 import 'package:skype_app/widgets/appbar.dart';
 
 import 'shimmering_logo.dart';
 
-class UserDetailsContainer extends StatelessWidget {
+class UserDetailsContainer extends StatefulWidget {
+  @override
+  _UserDetailsContainerState createState() => _UserDetailsContainerState();
+}
+
+class _UserDetailsContainerState extends State<UserDetailsContainer> {
   final FirebaseMethods authMethods = FirebaseMethods();
 
   @override
@@ -64,40 +74,110 @@ class UserDetailsContainer extends StatelessWidget {
   }
 }
 
-class UserDetailsBody extends StatelessWidget {
+class UserDetailsBody extends StatefulWidget {
   @override
+  _UserDetailsBodyState createState() => _UserDetailsBodyState();
+}
+
+class _UserDetailsBodyState extends State<UserDetailsBody> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      UserProvider userProvider =
+          Provider.of<UserProvider>(context, listen: false);
+      await userProvider.refreshUser();
+    });
+  }
+
+  final FirebaseMethods authMethods = FirebaseMethods();
+  bool p = false;
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
     final User user = userProvider.getUser;
 
+    void set() {
+      setState(() {
+        p = true;
+      });
+    }
+
+    void riset() {
+      setState(() {
+        p = false;
+        Navigator.maybePop(context);
+      });
+    }
+
+    void change({@required ImageSource source}) {
+      setState(() async {
+        // String str =
+        //  'https://homepages.cae.wisc.edu/~ece533/images/airplane.png';
+        set();
+        File selectedImage = await Utils.pickImage(source: source);
+        String url = await authMethods.uploadImageToStorage(selectedImage);
+
+        authMethods.setUserphoto(userId: user.uid, l: url);
+        riset();
+        //CircularProgressIndicator();
+      });
+    }
+
     return Container(
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-      child: Row(
+      child: Column(
         children: [
-          CachedImage(
-            user.profilePhoto,
-            isRound: true,
-            radius: 50,
-          ),
-          SizedBox(width: 15),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                user.name,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.black87,
-                ),
+          Row(
+            children: [
+              CachedImage(
+                user.profilePhoto,
+                isRound: true,
+                radius: 50,
               ),
-              SizedBox(height: 10),
-              Text(
-                user.email,
-                style: TextStyle(fontSize: 14, color: Colors.black87),
+              SizedBox(width: 15),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    user.name,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    user.email,
+                    style: TextStyle(fontSize: 14, color: Colors.black87),
+                  ),
+                ],
               ),
+              SizedBox(
+                width: 3,
+              ),
+              Expanded(
+                  child: FlatButton(
+                      color: Colors.blue,
+                      highlightColor: Colors.blue,
+                      onPressed: () => change(source: ImageSource.gallery),
+                      child: Center(
+                        child: Text('Change Picture',
+                            style:
+                                TextStyle(fontSize: 10, color: Colors.white)),
+                      ))),
             ],
           ),
+          p
+              ?
+
+              // Find the ScaffoldMessenger in the widget tree
+              // and use it to show a SnackBar.
+              //ScaffoldMessenger.of(context).showSnackBar(snackBar)
+              CircularProgressIndicator()
+              : Container(),
         ],
       ),
     );

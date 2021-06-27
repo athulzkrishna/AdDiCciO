@@ -16,6 +16,7 @@ import 'package:skype_app/utils/universal_variables.dart';
 import 'package:skype_app/utils/utilities.dart';
 import 'package:skype_app/widgets/appbar.dart';
 import 'package:skype_app/widgets/custom_tile.dart';
+import 'package:recase/recase.dart';
 
 class ChatListScreen extends StatefulWidget {
   @override
