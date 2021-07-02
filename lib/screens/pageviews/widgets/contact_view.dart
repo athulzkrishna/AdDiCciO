@@ -7,6 +7,7 @@ import 'package:skype_app/provider/user_provider.dart';
 import 'package:skype_app/resources/firebase_methods.dart';
 import 'package:skype_app/screens/chatscreens/chat_screen.dart';
 import 'package:skype_app/screens/chatscreens/widgets/cached_image.dart';
+import 'package:skype_app/screens/pageviews/widgets/trailing.dart';
 import 'package:skype_app/utils/universal_variables.dart';
 import 'package:skype_app/widgets/custom_tile.dart';
 import 'package:skype_app/widgets/profile_helper.dart';
@@ -54,6 +55,8 @@ class ViewLayout extends StatelessWidget {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
 
     return Tile(
+      trailing:
+          TraiLing(receiver: contact.uid, sender: userProvider.getUser.uid),
       mini: false,
       onTap: () => Navigator.push(
           context,
@@ -69,7 +72,7 @@ class ViewLayout extends StatelessWidget {
             ? contact.name.titleCase
             : "..",
         style:
-            TextStyle(color: Colors.black87, fontFamily: "Arial", fontSize: 19),
+            TextStyle(color: Colors.black87, fontFamily: "Arial", fontSize: 16),
       ),
       subtitle: LastMessageContainer(
         stream: _chatMethods.fetchLastMessageBetween(

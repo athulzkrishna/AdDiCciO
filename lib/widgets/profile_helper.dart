@@ -37,6 +37,8 @@ class DialogHelpers {
           ))
         : Image(
             image: CachedNetworkImageProvider(imageUrl),
+            height: 400,
+            width: 400,
           );
     return new Dialog(
       shape: RoundedRectangleBorder(),

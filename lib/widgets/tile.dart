@@ -66,7 +66,7 @@ class Tile extends StatelessWidget {
                         )
                       ],
                     ),
-                    trailing ?? Container(),
+                    trailing ?? Container(child: Text('Hey')),
                   ],
                 ),
               ),

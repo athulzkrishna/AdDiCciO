@@ -298,6 +298,26 @@ class FirebaseMethods {
 
     document.updateData(<String, dynamic>{'seen': true});
   }
+
+  Future<int> getnumberofunread(String a, String b) async {
+    int c = 0;
+    String k = Utils().getid(a, b);
+    QuerySnapshot querySnapshot = await firestore
+        .collection("messages")
+        .document(k)
+        .collection(k)
+        .orderBy("timestamp", descending: true)
+        .getDocuments();
+    for (var i = 0; i < querySnapshot.documents.length; i++) {
+      Message p = Message.fromMap(querySnapshot.documents[i].data);
+      if (p.seen == true || p.senderId == a) {
+        break;
+      } else {
+        c++;
+      }
+    }
+    return c;
+  }
 }
 
 

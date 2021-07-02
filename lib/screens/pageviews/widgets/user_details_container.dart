@@ -156,7 +156,7 @@ class _UserDetailsBodyState extends State<UserDetailsBody> {
                           user.name,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 18,
+                            fontSize: 15,
                             color: Colors.black87,
                           ),
                         ),
