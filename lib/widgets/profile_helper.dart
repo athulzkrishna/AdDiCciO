@@ -1,5 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:skype_app/models/user.dart';
+import 'package:skype_app/screens/chatscreens/chat_screen.dart';
+import 'package:skype_app/utils/call_utilities.dart';
+import 'package:skype_app/utils/permissions.dart';
 
 final secondaryColor = Colors.lightBlue;
 
@@ -9,6 +13,8 @@ class DialogHelpers {
     String id,
     String imageUrl,
     String name,
+    User d,
+    User u,
     GestureTapCallback onTapMessage,
     GestureTapCallback onTapCall,
     GestureTapCallback onTapVideoCall,
@@ -72,22 +78,21 @@ class DialogHelpers {
                 children: <Widget>[
                   IconButton(
                     icon: Icon(Icons.message),
-                    onPressed: () {},
-                    color: secondaryColor,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.call),
-                    onPressed: () {},
+                    onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ChatScreen(
+                            receiver: d,
+                          ),
+                        )),
                     color: secondaryColor,
                   ),
                   IconButton(
                     icon: Icon(Icons.videocam),
-                    onPressed: () {},
-                    color: secondaryColor,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.info_outline),
-                    onPressed: () {},
+                    onPressed: () async => await Permissions
+                            .cameraAndMicrophonePermissionsGranted()
+                        ? CallUtils.dial(from: u, to: d, context: context)
+                        : {},
                     color: secondaryColor,
                   ),
                 ],

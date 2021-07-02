@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,7 +12,7 @@ import 'package:skype_app/screens/chatscreens/widgets/cached_image.dart';
 import 'package:skype_app/screens/login_screen.dart';
 import 'package:skype_app/utils/utilities.dart';
 import 'package:skype_app/widgets/appbar.dart';
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'shimmering_logo.dart';
 
 class UserDetailsContainer extends StatefulWidget {
@@ -25,6 +24,17 @@ class _UserDetailsContainerState extends State<UserDetailsContainer> {
   final FirebaseMethods authMethods = FirebaseMethods();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      UserProvider userProvider =
+          Provider.of<UserProvider>(context, listen: false);
+      await userProvider.refreshUser();
+    });
+  }
+
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
 
@@ -125,60 +135,99 @@ class _UserDetailsBodyState extends State<UserDetailsBody> {
       });
     }
 
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              CachedImage(
-                user.profilePhoto,
-                isRound: true,
-                radius: 50,
-              ),
-              SizedBox(width: 15),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    user.name,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.black87,
+    return p
+        ? Load()
+        : Container(
+            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    CachedImage(
+                      user.profilePhoto,
+                      isRound: true,
+                      radius: 50,
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    user.email,
-                    style: TextStyle(fontSize: 14, color: Colors.black87),
-                  ),
-                ],
-              ),
-              SizedBox(
-                width: 3,
-              ),
-              Expanded(
-                  child: FlatButton(
-                      color: Colors.blue,
-                      highlightColor: Colors.blue,
-                      onPressed: () => change(source: ImageSource.gallery),
-                      child: Center(
-                        child: Text('Change Picture',
-                            style:
-                                TextStyle(fontSize: 10, color: Colors.white)),
-                      ))),
-            ],
-          ),
-          p
-              ?
+                    SizedBox(width: 15),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          user.name,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          user.email,
+                          style: TextStyle(fontSize: 14, color: Colors.black87),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 3,
+                    ),
+                    Expanded(
+                        child: FlatButton(
+                            color: Colors.blue,
+                            highlightColor: Colors.blue,
+                            onPressed: () =>
+                                change(source: ImageSource.gallery),
+                            child: Center(
+                              child: Text('Change Picture',
+                                  style: TextStyle(
+                                      fontSize: 10, color: Colors.white)),
+                            ))),
+                  ],
+                ),
+                // p
+                //  ?
 
-              // Find the ScaffoldMessenger in the widget tree
-              // and use it to show a SnackBar.
-              //ScaffoldMessenger.of(context).showSnackBar(snackBar)
-              CircularProgressIndicator()
-              : Container(),
-        ],
+                // Find the ScaffoldMessenger in the widget tree
+                // and use it to show a SnackBar.
+                //ScaffoldMessenger.of(context).showSnackBar(snackBar)
+                // CircularProgressIndicator()
+                // : Container(),
+              ],
+            ),
+          );
+  }
+}
+
+class Load extends StatefulWidget {
+  @override
+  _LoadState createState() => _LoadState();
+}
+
+class _LoadState extends State<Load> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 500,
+      height: 700,
+      color: Colors.blue[900],
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SpinKitRotatingCircle(
+              color: Colors.white,
+              size: 50.0,
+            ),
+            Center(
+              child: Text('Please wait while its loading',
+                  style: TextStyle(fontSize: 10, color: Colors.white)),
+            )
+          ],
+        ),
       ),
     );
   }

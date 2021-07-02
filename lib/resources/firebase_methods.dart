@@ -100,17 +100,17 @@ class FirebaseMethods {
       Message message, User sender, User receiver) async {
     var map = message.toMap();
 
-    await firestore
-        .collection("messages")
-        .document(message.senderId)
-        .collection(message.receiverId)
-        .add(map);
-
+    //   await firestore
+    //     .collection("messages")
+    //   .document(message.senderId)
+    //   .collection(message.receiverId)
+    //   .add(map);
+    String convid = Utils().getid(message.senderId, message.receiverId);
     addToContacts(senderId: message.senderId, receiverId: message.receiverId);
     return await firestore
         .collection("messages")
-        .document(message.receiverId)
-        .collection(message.senderId)
+        .document(convid)
+        .collection(convid)
         .add(map);
   }
 
@@ -208,12 +208,15 @@ class FirebaseMethods {
   Stream<QuerySnapshot> fetchLastMessageBetween({
     @required String senderId,
     @required String receiverId,
-  }) =>
-      _messageCollection
-          .document(senderId)
-          .collection(receiverId)
-          .orderBy("timestamp")
-          .snapshots();
+  }) {
+    String idd = Utils().getid(senderId, receiverId);
+    return _messageCollection
+        .document(idd)
+        .collection(idd)
+        .orderBy("timestamp")
+        .snapshots();
+  }
+
   void setUserState({@required String userId, @required UserState userState}) {
     int stateNum = Utils.stateToNum(userState);
 
@@ -285,4 +288,28 @@ class FirebaseMethods {
       return null;
     }
   }
+
+  void makeit(idd, doc) {
+    final DocumentReference document = Firestore.instance
+        .collection('messages')
+        .document(idd)
+        .collection(idd)
+        .document(doc.documentID);
+
+    document.updateData(<String, dynamic>{'seen': true});
+  }
 }
+
+
+//    for (var i = 0; i < receivers.documents.length; i++) {
+//      _messageCollection
+//          .document(receiver)
+//          .collection(user)
+//          .document(l[i])
+//          .updateData({'seen': true});
+//    }  print(receivers.documents.length);
+//    for (var i = 0; i < receivers.documents.length; i++) {
+//      if (true) {
+//        l.add(receivers.documents[i].documentID);
+  //    }
+//    }

@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:skype_app/constants/strings.dart';
 import 'package:skype_app/models/message.dart';
 import 'package:skype_app/models/user.dart';
+import 'package:skype_app/resources/firebase_methods.dart';
 import 'package:skype_app/resources/firebase_repository.dart';
 import 'package:skype_app/screens/callscreens/pickup/pickup_layout.dart';
 import 'package:skype_app/utils/call_utilities.dart';
 import 'package:skype_app/utils/permissions.dart';
 import 'package:skype_app/utils/universal_variables.dart';
+import 'package:skype_app/utils/utilities.dart';
 import 'package:skype_app/widgets/appbar.dart';
 import 'package:skype_app/widgets/custom_tile.dart';
 import 'package:emoji_picker/emoji_picker.dart';
@@ -27,7 +29,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   TextEditingController textFieldController = TextEditingController();
   FirebaseRepository _repository = FirebaseRepository();
-
+  FirebaseMethods authMethods = FirebaseMethods();
   ScrollController _listScrollController = ScrollController();
 
   User sender;
@@ -173,11 +175,12 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget messageList() {
+    String convid = Utils().getid(_currentUserId, widget.receiver.uid);
     return StreamBuilder(
       stream: Firestore.instance
           .collection(MESSAGES_COLLECTION)
-          .document(_currentUserId)
-          .collection(widget.receiver.uid)
+          .document(convid)
+          .collection(convid)
           .orderBy(TIMESTAMP_FIELD, descending: true)
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -209,7 +212,12 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget chatMessageItem(DocumentSnapshot snapshot) {
     Message _message = Message.fromMap(snapshot.data);
-
+    String convid = Utils().getid(_currentUserId, widget.receiver.uid);
+    //authMethods.makeit(_currentUserId, widget.receiver.uid);
+    if (!_message.seen && _message.senderId != _currentUserId) {
+      // use future builder with list view... and inside future,
+      authMethods.makeit(convid, snapshot);
+    }
     return Container(
       margin: EdgeInsets.symmetric(vertical: 15),
       child: Container(
@@ -226,35 +234,67 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget senderLayout(Message message) {
     //  Radius messageRadius = Radius.circular(10);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 7.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Text(readTimestamp(message.timestamp),
-              style: GoogleFonts.montserrat(
-                textStyle: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 10.0,
-                    fontWeight: FontWeight.w300),
-              )),
-          SizedBox(width: 15),
-          Container(
-              constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * .6),
-              padding: const EdgeInsets.all(15.0),
-              decoration: BoxDecoration(
-                color: Colors.lightBlue,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25),
-                  topRight: Radius.circular(25),
-                  bottomLeft: Radius.circular(25),
-                ),
-              ),
-              child: getMessage(message)),
-        ],
-      ),
-    );
+    return message.seen
+        ? Padding(
+            padding: const EdgeInsets.symmetric(vertical: 7.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Text(readTimestamp(message.timestamp),
+                    style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 10.0,
+                          fontWeight: FontWeight.w300),
+                    )),
+                SizedBox(width: 15),
+                //code here to makes condition to change color of recieved texts
+                Container(
+                    constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * .6),
+                    padding: const EdgeInsets.all(15.0),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(25),
+                        topRight: Radius.circular(25),
+                        bottomLeft: Radius.circular(25),
+                      ),
+                    ),
+                    child: getMessage(message)),
+              ],
+            ),
+          )
+        : Padding(
+            padding: const EdgeInsets.symmetric(vertical: 7.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Text(readTimestamp(message.timestamp),
+                    style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 10.0,
+                          fontWeight: FontWeight.w300),
+                    )),
+                SizedBox(width: 15),
+                //code here to makes condition to change color of recieved texts
+                Container(
+                    constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * .6),
+                    padding: const EdgeInsets.all(15.0),
+                    decoration: BoxDecoration(
+                      color: Colors.lightBlue,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(25),
+                        topRight: Radius.circular(25),
+                        bottomLeft: Radius.circular(25),
+                      ),
+                    ),
+                    child: getMessage(message)),
+              ],
+            ),
+          );
   }
 
   getMessage(Message message) {
@@ -277,7 +317,7 @@ class _ChatScreenState extends State<ChatScreen> {
     DateTime s =
         DateTime.fromMicrosecondsSinceEpoch(time.microsecondsSinceEpoch);
     String formattedTime = DateFormat.jm().format(s);
-    String k = "${s.hour}:${s.minute}";
+    //String k = "${s.hour}:${s.minute}";
     return formattedTime;
   }
 
@@ -411,12 +451,12 @@ class _ChatScreenState extends State<ChatScreen> {
       var text = textFieldController.text;
 
       Message _message = Message(
-        receiverId: widget.receiver.uid,
-        senderId: sender.uid,
-        message: text,
-        timestamp: Timestamp.now(),
-        type: 'text',
-      );
+          receiverId: widget.receiver.uid,
+          senderId: sender.uid,
+          message: text,
+          timestamp: Timestamp.now(),
+          type: 'text',
+          seen: false);
 
       setState(() {
         isWriting = false;

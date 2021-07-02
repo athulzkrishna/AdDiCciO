@@ -30,10 +30,10 @@ class Utils {
     int rand = Random().nextInt(10000);
 
     Im.Image image = Im.decodeImage(imageToCompress.readAsBytesSync());
-    Im.copyResize(image, width: 500, height: 500);
+    Im.copyResize(image, width: 300, height: 300);
 
     return new File('$path/img_$rand.jpg')
-      ..writeAsBytesSync(Im.encodeJpg(image, quality: 85));
+      ..writeAsBytesSync(Im.encodeJpg(image, quality: 80));
   }
 
   static int stateToNum(UserState userState) {
@@ -66,5 +66,11 @@ class Utils {
     DateTime dateTime = DateTime.parse(dateString);
     var formatter = DateFormat('dd/MM/yy');
     return formatter.format(dateTime);
+  }
+
+  String getid(String userid, String peerid) {
+    return userid.hashCode <= peerid.hashCode
+        ? userid + '_' + peerid
+        : peerid + '_' + userid;
   }
 }

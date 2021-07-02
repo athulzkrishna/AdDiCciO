@@ -62,7 +62,8 @@ class ViewLayout extends StatelessWidget {
               receiver: contact,
             ),
           )),
-      onLongPress: () => onTapProfileChatItem(context, contact),
+      onLongPress: () =>
+          onTapProfileChatItem(context, contact, userProvider.getUser),
       title: Text(
         (contact != null ? contact.name.camelCase : null) != null
             ? contact.name.titleCase
@@ -111,13 +112,14 @@ class ViewLayout extends StatelessWidget {
   }
 }
 
-void onTapProfileChatItem(BuildContext context, User chat) {
+void onTapProfileChatItem(BuildContext context, User chat, User sender) {
   Dialog profileDialog = DialogHelpers.getProfileDialog(
-    context: context,
-    id: chat.uid,
-    imageUrl: chat.profilePhoto,
-    name: chat.name,
-  );
+      context: context,
+      id: chat.uid,
+      imageUrl: chat.profilePhoto,
+      name: chat.name,
+      d: chat,
+      u: sender);
   showDialog(
       context: context, builder: (BuildContext context) => profileDialog);
 }

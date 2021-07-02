@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Message {
+class Mesg {
   String senderId;
   String receiverId;
   String type;
   String message;
   Timestamp timestamp;
   String photoUrl;
-  bool seen;
+  String seen;
 
-  Message(
+  Mesg(
       {this.senderId,
       this.receiverId,
       this.type,
@@ -19,7 +19,7 @@ class Message {
 
   //Will be only called when you wish to send an image
   // named constructor
-  Message.imageMessage(
+  Mesg.imageMessage(
       {this.senderId,
       this.receiverId,
       this.message,
@@ -39,7 +39,7 @@ class Message {
   }
 
   // named constructor
-  Message.fromMap(Map<String, dynamic> map) {
+  Mesg.fromMap(Map<String, dynamic> map) {
     this.senderId = map['senderId'];
     this.receiverId = map['receiverId'];
     this.type = map['type'];
