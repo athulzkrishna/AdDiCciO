@@ -1,6 +1,14 @@
-# skype_app
+# Adiccio
+A chat and video call application using flutter and firebase. 
+# Features
+- 1.Seen and Unseen messages
+- 2.Real time reordering of messages in chat home screen
+- 3.Provison to update profile picture and view other's profile too.
+- 4.Video Calling
+- 5.People you may know page
+- 6.Interactive UI 
 
-A new Flutter project.
+
 
 ## Getting Started
 
@@ -14,3 +22,4 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
